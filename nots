@@ -1,0 +1,22 @@
+https://1a2e48606e13b6c491e6ec9ac4a63d6a-dot-lef5c6b25a09b3d58-tp.appspot.com/_ah/push-handlers/pubsub/projects/trifacta-gcloud-testing/topics/gke_updates?pubsub_trigger=true
+
+
+{'message': {'data': 'aGVsbG93cHVic3Vi', 'messageId': '4781099328383666', 'message_id': '4781099328383666', 'publishTime': '2022-05-28T18:28:47.129Z', 'publish_time': '2022-05-28T18:28:47.129Z'}, 'subscription': 'projects/trifacta-development/subscriptions/check2'}
+
+
+
+
+
+runtime: nodejs12
+handlers:
+# Serve all static files with url ending with a file extension
+- url: /(.*\..+)$
+  static_files: build/\1
+  upload: build/(.*\..+)$
+# Catch all handler to index.html
+- url: /.*
+  static_files: build/index.html
+  upload: build/index.html
+
+slack_sdk==3.17.0
+
