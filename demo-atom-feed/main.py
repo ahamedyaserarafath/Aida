@@ -1,7 +1,7 @@
 import base64
 import json
 import os
-import atom_feeder
+from common import atom_feeder
 from google.cloud import pubsub_v1
 import re
 
@@ -9,6 +9,8 @@ import re
 # Instantiates a Pub/Sub client
 publisher = pubsub_v1.PublisherClient()
 PROJECT_ID = os.getenv('GOOGLE_CLOUD_PROJECT')
+atom_feeder_url = "https://letzops1.statuspage.io/history.atom"
+app_name = "demo"
 
 def get_incident_map(value):
     if re.search('Service outage', value, re.IGNORECASE) or re.search('Service disruption', value, re.IGNORECASE):
@@ -21,7 +23,7 @@ def get_incident_map(value):
 
 # Publishes a message to a Cloud Pub/Sub topic.
 def demo_status(request):
-    atom_feeder_url = "https://letzops1.statuspage.io/history.atom"
+    
     request_json = request.get_json(silent=True)
 
     if request.args and 'topic' in request.args:
@@ -31,11 +33,12 @@ def demo_status(request):
 
     print(f'Publishing message to topic {topic_name}')
 
-    feedparser = atom_feeder.AtomFeeder(atom_feeder_url ,app_name = "GCP-")
+    feedparser = atom_feeder.AtomFeeder(atom_feeder_url ,app_name = app_name)
     incident_list = feedparser.incident_check()
     incident_data_list = []
     if type(incident_list) is list and not incident_list:
-        return ('GCP is doing good', 200)
+        print (f'{app_name} is doing good')
+        return ('App is doing good', 200)
     for incident_dict in incident_list:
         incident_temp = {}
         incident_temp['title'] = incident_dict['title']
@@ -43,21 +46,7 @@ def demo_status(request):
         incident_temp['statuscolor'] = get_incident_map(incident_dict['title'])
         incident_temp['link'] = incident_dict['link']
         incident_data_list.append(incident_temp)
-#     message = '''Diagnosis: Diagnosis: Customer's might experience following:
 
-# 1. External HTTP/S Load Balancing, Cloud CDN - config changes will be accepted & fail to propagate
-# 2. Cloud Armor rules may also be affected
-# 3. Appengine flex customers may see apps fail to deploy
-# 4. Traffic Director may see configs fail to propagate
-# 5. VM instance group healthchecks & functionality like autoscaling/autohealing may be affected
-# Workaround: None at this time.
-# '''
-#     message_json = json.dumps({
-#         'data': {
-#             'status' : incident_status,
-#             'message': message
-#             },
-#     })
     message_json = json.dumps(incident_data_list)
     message_bytes = message_json.encode('utf-8')
 

@@ -9,6 +9,8 @@ import re
 # Instantiates a Pub/Sub client
 publisher = pubsub_v1.PublisherClient()
 PROJECT_ID = os.getenv('GOOGLE_CLOUD_PROJECT')
+atom_feeder_url = "https://status.cloud.google.com/en/feed.atom"
+app_name = "GCP"
 
 def get_incident_map(value):
     if re.search('Service outage', value, re.IGNORECASE) or re.search('Service disruption', value, re.IGNORECASE):
@@ -21,7 +23,6 @@ def get_incident_map(value):
 
 # Publishes a message to a Cloud Pub/Sub topic.
 def gcp_status(request):
-    atom_feeder_url = "https://status.cloud.google.com/en/feed.atom"
     request_json = request.get_json(silent=True)
 
     if request.args and 'topic' in request.args:
@@ -31,11 +32,12 @@ def gcp_status(request):
 
     print(f'Publishing message to topic {topic_name}')
 
-    feedparser = atom_feeder.AtomFeeder(atom_feeder_url ,app_name = "GCP-")
+    feedparser = atom_feeder.AtomFeeder(atom_feeder_url ,app_name = app_name +"-")
     incident_list = feedparser.incident_check()
     incident_data_list = []
     if type(incident_list) is list and not incident_list:
-        return ('GCP is doing good', 200)
+        print (f'{app_name} is doing good')
+        return ('App is doing good', 200)
     for incident_dict in incident_list:
         incident_temp = {}
         incident_temp['title'] = incident_dict['title']
