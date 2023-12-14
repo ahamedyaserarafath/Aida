@@ -1,6 +1,6 @@
 **Introduction**
 
-AIDA (Artificially Incident Assistant),  aims to address the common challenge faced by SaaS applications - understanding the root cause of incidents and service outages that can impact their performance. In this article, we will delve into the problem statement, solution, tools, and architecture of AIDA using GCP.
+AIDA (Artificial Incident Assistant),  aims to address the common challenge faced by SaaS applications - understanding the root cause of incidents and service outages that can impact their performance. In this article, we will delve into the problem statement, solution, tools, and architecture of AIDA using GCP.
 
 
 **Problem Statement**
@@ -8,7 +8,7 @@ AIDA (Artificially Incident Assistant),  aims to address the common challenge fa
 SaaS applications often encounter issues that impact their performance, but identifying the root cause can be a time-consuming task. While the focus is typically on the application itself, external infrastructure dependencies can also contribute to these incidents. For example, if a SaaS application relies on Cloud Storage, Cloud SQL, and GKE (Google Kubernetes Engine), network latency affecting the Cloud SQL Persistent Disk can slow down the entire application.
 
 
-**Solution: AIDA - Artificially Incident Assistant**
+**Solution: AIDA - Artificial Incident Assistant**
 
 AIDA is an innovative solution that aims to streamline incident management and provide customized notifications to customers whenever an incident or service outage occurs on their registered applications. By leveraging the power of GCP and its various services, AIDA helps businesses gain deeper insights into incidents, enabling them to take proactive measures and minimize downtime.
 
